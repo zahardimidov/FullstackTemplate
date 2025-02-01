@@ -1,0 +1,1 @@
+ENGINE=postgresql+asyncpg://template:template@template-postgres:5432/template
