@@ -19,7 +19,3 @@ REDIS_HOST = getenv('REDIS_HOST', "localhost")
 REDIS_PORT = getenv('REDIS_HOST', 6379)
 
 TIMEZONE = pytz.timezone(getenv('TIMEZONE', 'Europe/Moscow'))
-
-'''
-ENV=.localenv docker compose up --build --scale backend=1
-'''
