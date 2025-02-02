@@ -1,6 +1,6 @@
 # Fullstack project deploy
 
-This document provides instructions for setting up the FastAPI Authentication project, including environment setup, server configuration, and SSH key generation for CI/CD setup.
+This document provides instructions for setting up the FastAPI project, including environment setup, server configuration, and SSH key generation for CI/CD setup.
 
 ## Table of Contents
 - [Setup Environment](#setup-environment)
@@ -36,7 +36,7 @@ To configure Visual Studio Code to use the correct Python interpreter:
 
 1. Open the command palette by pressing CMD + SHIFT + P.
 2. Type and select Python: Select Interpreter.
-3. Enter the path to the interpreter: ./venv/bin/python3.11
+3. Enter the path to the interpreter: ./venv/bin/python3.12
 
 
 ## Test Coverage
@@ -101,13 +101,10 @@ server {
   server_name [domain or ip];
 
   location / {
-      proxy_pass http://0.0.0.0:5173/;
+      proxy_pass http://0.0.0.0:4200/;
   }
   location /api/ {
-      proxy_pass http://0.0.0.0:4545/;
-  }
-  location /webhook {
-      proxy_pass http://0.0.0.0:4545/webhook;
+      proxy_pass http://0.0.0.0:8080/;
   }
 }
 ```
@@ -166,7 +163,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.12'
           architecture: 'x64'
       - name: Install requirements
         run: pip install -r backend/requirements.txt
@@ -197,7 +194,7 @@ jobs:
             cd /home/project_dir
             git pull https://zahardimidov:${{secrets.REPO_TOKEN}}@github.com/zahardimidov/${{secrets.REPO_NAME}}.git deploy
             docker compose down
-            docker compose --env-file .devenv up --build -d
+            ENV=.devenv docker compose up --build --scale nginx=1
 ```
 
 ### Results
@@ -220,11 +217,3 @@ git add . && git commit -m "update" && git push
 ```bash
 git checkout deploy && git pull origin main && git push origin deploy && git checkout main
 ```
-
-docker-compose up --scale nginx=1
-docker compose --env-file .localenv up --build --scale nginx=1
-
-coverage run -m pytest --log-cli-level=INFO
-
-# FullstackMiniApp
-# FullstackTemplate
