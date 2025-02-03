@@ -11,7 +11,6 @@ load_dotenv(ENV_FILE)
 
 DEBUG = bool(getenv('DEBUG', 1))
 PORT = getenv('PORT', 8080)
-HOST = getenv('HOST', f'http://0.0.0.0:{PORT}')
 
 ENGINE = getenv('ENGINE', 'sqlite+aiosqlite:///./database/database.db')
 
