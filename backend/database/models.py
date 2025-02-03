@@ -1,11 +1,16 @@
+import uuid
 from datetime import datetime
 from typing import Any, Dict
 
-from utils import generate_uuid, hash_password
-from sqlalchemy import TIMESTAMP, String, Integer, func
+from common.security import hash_password
+from sqlalchemy import TIMESTAMP, Integer, String, func
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+
+
+def generate_uuid():
+    return str(uuid.uuid4())
 
 
 class Base(AsyncAttrs, DeclarativeBase):

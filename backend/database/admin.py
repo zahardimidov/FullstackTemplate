@@ -1,7 +1,7 @@
 import os
 
+from common.security import create_jwt_token, verify_jwt_token
 from database.models import Product, User
-from utils import create_jwt_token, verify_jwt_token
 from fastapi import Request
 from jinja2 import pass_context
 from sqladmin import Admin as SQLAdmin
@@ -11,6 +11,7 @@ from sqladmin.authentication import AuthenticationBackend
 
 class UserAdmin(ModelView, model=User):
     column_list = [User.id]
+
 
 class ProductAdmin(ModelView, model=Product):
     column_list = [Product.id]

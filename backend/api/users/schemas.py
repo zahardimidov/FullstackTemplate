@@ -1,7 +1,9 @@
-from pydantic import model_validator
-from schemas import CustomStr, BaseModel, PydanticBaseModel
 import re
+
+from common.schemas import BaseModel, CustomStr, PydanticBaseModel
+from pydantic import model_validator
 from typing_extensions import Self
+
 
 def validate_email(email):
     pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
@@ -18,7 +20,8 @@ class Email(CustomStr):
             raise ValueError
 
         return value
-    
+
+
 class Password(CustomStr):
     @classmethod
     def validate(cls, value):
@@ -28,6 +31,7 @@ class Password(CustomStr):
         if not re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", value):
             raise ValueError
         return value
+
 
 class UserSignUp(BaseModel):
     name: str
@@ -50,6 +54,7 @@ class UserSignIn(BaseModel):
 
 class UserSignInResponse(BaseModel):
     token: str
+
 
 class UserMe(PydanticBaseModel):
     name: str

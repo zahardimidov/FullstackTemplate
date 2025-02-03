@@ -1,7 +1,7 @@
 from api.dependencies import CurrentUser
 from api.users.schemas import *
+from common.security import create_jwt_token, verify_password
 from database.requests import *
-from utils import create_jwt_token, verify_password
 from fastapi import APIRouter, HTTPException
 
 router = APIRouter(prefix="/user")

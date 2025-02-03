@@ -2,9 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any
 
-from config import DEBUG, TIMEZONE
-from fastapi import HTTPException
-from fastapi.exceptions import ValidationException
+from config import TIMEZONE
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import ConfigDict, GetCoreSchemaHandler
 from pydantic_core import CoreSchema, core_schema

@@ -1,5 +1,4 @@
 import os
-import uuid
 from datetime import datetime, timedelta, timezone
 
 import jwt
@@ -9,9 +8,6 @@ pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'my_secret_key')
 ALGORITHM = "HS256"
-
-def generate_uuid():
-    return str(uuid.uuid4())
 
 def create_jwt_token(data: dict, expire = timedelta(hours=12)) -> str:
     expiration = datetime.now(timezone.utc) + expire

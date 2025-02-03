@@ -4,7 +4,7 @@ from database.requests import get_one_by_jwt_id
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from database.models import User
-from utils import verify_jwt_token
+from common.security import verify_jwt_token
 
 auth_scheme = HTTPBearer()
 
