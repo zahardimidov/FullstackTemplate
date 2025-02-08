@@ -1,0 +1,64 @@
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    restart: always
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "service", "nginx", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    deploy:
+      replicas: 0
+    networks:
+      - services_net
+
+  template-postgres:
+    image: postgres:16.6-alpine
+    container_name: template-postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - services_net
+
+  redis:
+    image: redis:7.4
+    container_name: redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - services_net
+
+  backend:
+    build:
+      context: ../backend
+    container_name: backend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - services_net
+    depends_on:
+      - template-postgres
+      - redis
+
+volumes:
+  template-data:
+
+networks:
+  services_net:
+    driver: bridge

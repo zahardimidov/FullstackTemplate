@@ -1,0 +1,77 @@
+
+services:
+  nginx:
+    extends:
+      file: ./docker-compose.base.yml
+      service: nginx
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+    ports:
+      - "80:80"
+    volumes:
+      - "../nginx.conf:/etc/nginx/nginx.conf"
+
+  template-postgres:
+    extends:
+      file: ./docker-compose.base.yml
+      service: template-postgres
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 4048M
+    ports:
+      - "5432:5432"
+    volumes:
+      - template-data:/var/lib/postgresql/data
+      - ../.pgdata:/var/lib/postgresql/
+    environment:
+      POSTGRES_DB: template
+      POSTGRES_USER: template
+      POSTGRES_PASSWORD: template
+      PGPORT: 5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U template"]
+
+  redis:
+    extends:
+      file: ./docker-compose.base.yml
+      service: redis
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 2048M
+    volumes:
+      - ../.redisdata:/data
+    ports:
+      - "6379:6379"
+
+  backend:
+    extends:
+      file: ./docker-compose.base.yml
+      service: backend
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 4048M
+    environment:
+      ENV: ${ENV:-}
+      PYTHONUNBUFFERED: 1
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/ping"]
+
+volumes:
+  template-data:
+
+networks:
+  services_net:
+    driver: bridge
